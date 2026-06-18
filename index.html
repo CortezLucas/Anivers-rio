@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NARAH CRM</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       Cabeçalho + Navegação
+  ============================================================ -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">
+        NARAH
+        <span>CRM da Clínica</span>
+      </div>
+      <nav>
+        <button class="nav-tab active" data-tab="patients">Pacientes</button>
+        <button class="nav-tab" data-tab="form" id="btn-new-patient">+ Novo Paciente</button>
+        <button class="nav-tab" data-tab="history">Histórico</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <main class="main">
+
+    <!-- ============================================================
+         TAB 1 — Pacientes
+    ============================================================ -->
+    <div id="tab-patients" class="tab-panel active">
+
+      <!-- Alerta de configuração (oculto quando configurado) -->
+      <div class="alert alert-warning setup-alert" style="display:none">
+        <span>⚙️</span>
+        <div>
+          <strong>Configure a API antes de usar.</strong><br>
+          Abra <code>app.js</code> e substitua <code>SEU_DEPLOYMENT_ID</code> pela URL do seu Apps Script
+          e <code>sua-chave-secreta-aqui</code> pela chave definida no <code>Code.gs</code>.
+          Consulte o <code>SETUP.md</code> para o passo a passo completo.
+        </div>
+      </div>
+
+      <!-- Estatísticas -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-label">Total de pacientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-today">—</div>
+          <div class="stat-label">Aniversários hoje</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-week">—</div>
+          <div class="stat-label">Nos próximos 7 dias</div>
+        </div>
+      </div>
+
+      <!-- Busca -->
+      <div class="search-row">
+        <input
+          id="search-input"
+          type="search"
+          class="search-input"
+          placeholder="Buscar por nome ou e-mail…"
+          autocomplete="off"
+        >
+      </div>
+
+      <!-- Lista de pacientes -->
+      <div id="patients-list">
+        <div class="loading-state">
+          <span class="spinner"></span> Carregando pacientes…
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+         TAB 2 — Formulário Paciente
+    ============================================================ -->
+    <div id="tab-form" class="tab-panel">
+      <div class="form-card">
+        <div class="form-title">
+          <span id="form-title-text">Novo paciente</span>
+        </div>
+
+        <form id="patient-form" novalidate>
+
+          <div class="form-row">
+            <label for="field-name">Nome completo *</label>
+            <input
+              id="field-name"
+              type="text"
+              placeholder="Ex: Maria da Silva"
+              required
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="form-row">
+            <label for="field-birthday">Data de aniversário *</label>
+            <input
+              id="field-birthday"
+              type="date"
+              required
+            >
+          </div>
+
+          <div class="form-row">
+            <label for="field-email">E-mail *</label>
+            <input
+              id="field-email"
+              type="email"
+              placeholder="paciente@email.com"
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-row">
+            <label for="field-phone">Telefone (opcional)</label>
+            <input
+              id="field-phone"
+              type="tel"
+              placeholder="(11) 99999-9999"
+              autocomplete="tel"
+            >
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-submit">Salvar paciente</button>
+            <button type="button" class="btn btn-outline" id="btn-cancel-edit" style="display:none">
+              Cancelar edição
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         TAB 3 — Histórico de envios
+    ============================================================ -->
+    <div id="tab-history" class="tab-panel">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <h2 class="section-title" style="margin:0">Histórico de e-mails</h2>
+        <div class="history-controls" style="margin:0">
+          <select id="filter-type" class="history-filter">
+            <option value="">Todos os tipos</option>
+            <option value="Automático">Automático</option>
+            <option value="Manual">Manual</option>
+          </select>
+          <button id="btn-refresh-history" class="btn btn-outline btn-sm">↻ Atualizar</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Paciente</th>
+              <th>E-mail</th>
+              <th>Tipo</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr>
+              <td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted);">
+                <span class="spinner"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
