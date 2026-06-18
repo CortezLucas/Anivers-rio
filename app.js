@@ -182,6 +182,8 @@ function patientCardHTML(p) {
 }
 
 function bindPatientActions(container) {
+  if (container._bound) return;   
+  container._bound = true;        
   container.addEventListener('click', async e => {
     const sendBtn   = e.target.closest('.btn-send-email');
     const editBtn   = e.target.closest('.btn-edit-patient');
